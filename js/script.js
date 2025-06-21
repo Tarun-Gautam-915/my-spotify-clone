@@ -1,3 +1,4 @@
+const PREFIX = window.location.hostname.includes("github.io") ? "my-spotify-clone/" : "";
 
 
 let currentsong = new Audio ();
@@ -18,7 +19,7 @@ function secondsToMinutesSeconds(seconds) {
 
 async function getsongs(folder) {
     currfolder = folder;
-    let a = await fetch(`${folder}/`)
+    let a = await fetch(`${PREFIX}${folder}/`)
     let response = await a.text();
     let div = document.createElement("div");
     div.innerHTML = response;
@@ -70,7 +71,7 @@ const playmusic = (track, pause=false) => {
 };
 
 async function displayalbums() {
-    let a = await fetch(`songs/`)
+    let a = await fetch(`${PREFIX}songs/`)
     let response = await a.text();
     let div = document.createElement("div");
     div.innerHTML = response;
@@ -83,7 +84,7 @@ async function displayalbums() {
         if(e.href.includes("/songs")){
             let folder = e.href.split("/").slice(-2)[0];
             // get the meatdata of the folder
-            let a = await fetch(`songs/${folder}/info.json`)
+            let a = await fetch(`${PREFIX}songs/${folder}/info.json`)
             let response = await a.json();
             cardcontainer.innerHTML = cardcontainer.innerHTML + `<div data-folder="${folder}" class="card">
 
@@ -115,7 +116,9 @@ async function main(){
 
    // get the list of songs
     await getsongs("songs/cs")
-    playmusic(songs[0], true); //play the first song by default
+    if(songs.length > 0){
+        playmusic(songs[0], true); //play the first song by default
+    }
 
     //display the albums
     displayalbums();
