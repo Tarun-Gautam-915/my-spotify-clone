@@ -35,7 +35,7 @@ async function getsongs(folder) {
     let songUL = document.querySelector(".songlist").getElementsByTagName("ul")[0];
     songUL.innerHTML = ""; //clear the previous songs
     for (const song of songs) {
-        songUL.innerHTML = songUL.innerHTML + `<li><img class="invert musiclogo" src="img/music-note-03-stroke-standard.svg" alt="music-note-03" width="32" height="32">
+        songUL.innerHTML = songUL.innerHTML + `<li><img class="invert musiclogo" src="./img/music-note-03-stroke-standard.svg" alt="music-note-03" width="32" height="32">
                             <div class="info">
 
                                 <div>${song.replaceAll("%20", " ")}</div>
@@ -43,7 +43,7 @@ async function getsongs(folder) {
                             </div>
                             <div class="playnow">
                                 <span>Play Now</span>
-                                <img class="invert" src="img/play-stroke-standard.svg" alt="play" width="32" height="32">
+                                <img class="invert" src="./img/play-stroke-standard.svg" alt="play" width="32" height="32">
                             </div>
                         </li>`;
     }
@@ -63,7 +63,7 @@ const playmusic = (track, pause=false) => {
     currentsong.src = `/${currfolder}/` + track;
     if(!pause){
         currentsong.play();
-        play.src = "img/pause-stroke-standard.svg";
+        play.src = "./img/pause-stroke-standard.svg";
     }
     document.querySelector(".songinfo").innerHTML = decodeURI(track)
     document.querySelector(".songtime").innerHTML = "00:00 / 00:00";
@@ -94,7 +94,7 @@ async function displayalbums() {
                             </svg>
                         </div>
 
-                        <img aria-hidden="false" draggable="false" loading="eager" src="/songs/${folder}/cover.jpg" alt="happy hits" class="mMx2LUixlnN_Fu45JpFB CmkY1Ag0tJDfnFXbGgju _EShSNaBK1wUIaZQFJJQ Yn2Ei5QZn19gria6LjZj" sizes="(min-width: 1280px) 232px, 192px">
+                        <img aria-hidden="false" draggable="false" loading="eager" src="./songs/${folder}/cover.jpg" alt="photo" class="mMx2LUixlnN_Fu45JpFB CmkY1Ag0tJDfnFXbGgju _EShSNaBK1wUIaZQFJJQ Yn2Ei5QZn19gria6LjZj" sizes="(min-width: 1280px) 232px, 192px">
                         <h2>${response.title}</h2>
                         <p>${response.description}</p>
                     </div>`
@@ -125,10 +125,10 @@ async function main(){
     play.addEventListener("click", () => {
         if(currentsong.paused){
             currentsong.play();
-            play.src = "img/pause-stroke-standard.svg";
+            play.src = "./img/pause-stroke-standard.svg";
         }else{
             currentsong.pause();
-            play.src = "img/play-stroke-standard.svg";
+            play.src = "./img/play-stroke-standard.svg";
         }
     });
 
@@ -184,23 +184,30 @@ async function main(){
 
     // add an event to volume 
 
-    document.querySelector(".volume").getElementsByTagName("input")[0].addEventListener("input", (e) => {
-        console.log("setting volume to", e.target.value,"/ 100");
-        currentsong.volume = parseInt(e.target.value) / 100;
-        if(currentsong.volume >0){
-            document.querySelector(".volume>img").src = document.querySelector(".volume>img").src.replace("img/volume-mute-02-stroke-standard.svg", "img/volume-high-stroke-standard.svg");
-        }
+    document.querySelector(".volume input").addEventListener("input", (e) => {
+    const volume = parseInt(e.target.value);
+    console.log("setting volume to", volume, "/ 100");
+
+    currentsong.volume = volume / 100;
+
+    // If volume > 0, switch to high-volume icon
+    if (volume > 0) {
+        document.querySelector(".volume > img").src = "./img/volume-high-stroke-standard.svg";
+    } else {
+        document.querySelector(".volume > img").src = "./img/volume-mute-02-stroke-standard.svg";
+    }
     });
+
 
     // add event listener to mute the track
 
     document.querySelector(".volume>img").addEventListener("click", e => {
     if (e.target.src.includes("volume-high-stroke-standard.svg")) {
-        e.target.src = e.target.src.replace("img/volume-high-stroke-standard.svg", "img/volume-mute-02-stroke-standard.svg");
+        e.target.src = "./img/volume-mute-02-stroke-standard.svg";
         currentsong.volume = 0;
         document.querySelector(".volume").getElementsByTagName("input")[0].value = 0;
     } else {
-        e.target.src = "img/volume-high-stroke-standard.svg";
+        e.target.src = "./img/volume-high-stroke-standard.svg";
         currentsong.volume = 0.1;
         document.querySelector(".volume").getElementsByTagName("input")[0].value = 10;
     }
