@@ -1,4 +1,4 @@
-const PREFIX = window.location.hostname.includes("github.io") ? "my-spotify-clone/" : "";
+const PREFIX = window.location.hostname.includes("github.io") ? "/my-spotify-clone/" : "/";
 
 
 let currentsong = new Audio ();
@@ -61,7 +61,7 @@ async function getsongs(folder) {
 }
 
 const playmusic = (track, pause=false) => {
-    currentsong.src = `/${currfolder}/` + track;
+    currentsong.src = `${PREFIX}${currfolder}/` + track;
     if(!pause){
         currentsong.play();
         play.src = "./img/pause-stroke-standard.svg";
